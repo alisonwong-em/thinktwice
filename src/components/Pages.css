@@ -1,0 +1,62 @@
+/* Styling for the repeated elements on the pages */
+.heading {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.learnBtn {
+    color: white;
+    background-color: black;
+}
+
+/* Columns */
+.categoryColumn {
+    float: left;
+    width: 46%;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+
+/* Styling for category buttons */
+.transparency {
+    color: white;
+    background-color: #931B46;
+}
+
+.susEffort {
+    color: white;
+    background-color: #6069B6;
+}
+
+.envImpact {
+    color: white;
+    background-color: #1A535C;
+}
+
+.ethLabour {
+    color: white;
+    background-color: #7F6A93;
+}
+
+.recycleMat {
+    color: white;
+    background-color: #931B46;
+}
+
+.orgMat {
+    color: white;
+    background-color: #1A535C;
+}
+
+.plasticFree {
+    color: white;
+    background-color: #6069B6;
+}
