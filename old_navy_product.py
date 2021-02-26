@@ -32,21 +32,6 @@ for detail in product_details_raw:
 # Product picture 
 product_color = driver.find_element_by_xpath("//*[@id='swatch-label--Color']").text
 product_color = product_color[7:]
-# product_color_img = driver.find_element_by_xpath("//div[@class='pdp-mfe-1qqxog6']/img")
-# product_color_img_src = product_color_img.get_attribute('src')
-
-# location = product_color_img.location 
-# size = product_color_img.size 
-# driver.save_screenshot('ss_selected color.png')
-# x = location['x'] 
-# y = location['y'] 
-# w = x + size['width'] 
-# h = y + size['height'] 
-# fullImg = Image.open('ss_selected color.png') 
-# cropImg = fullImg.crop((x, y, w, h))
-# cropImg.save('ss_selected color_crop.png') 
-
-# selected color: pdp-mfe-1qqxog6
 
 driver.save_screenshot('ss_finished screen.png')
 print('product page title: ' + driver.title)
@@ -57,19 +42,3 @@ print(product_details)
 print('product color: ' + product_color)
 print(product_color_img_src)
 driver.quit()
-
-
-
-
-
-# featureElement = browser.find_element_by_xpath(“//section[contains(string(),’START SCREENSHOT TESTING’)]”) 
-# location = featureElement .location 
-# size = featureElement .size 
-# browser.save_screenshot(“fullPageScreenshot.png”) 
-# x = location[‘x’] 
-# y = location[‘y’] 
-# w = x + size[‘width’] 
-# h = y + size[‘height’] 
-# fullImg = Image.open(“fullPageScreenshot.png”) 
-# cropImg = fullImg.crop(x, y, w, h) 
-# cropImg.save(‘cropImage.png’) 
