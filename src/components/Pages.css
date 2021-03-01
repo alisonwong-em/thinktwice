@@ -1,18 +1,74 @@
 /* Styling for the repeated elements on the pages */
+a { 
+    color:white;
+}
+
 .heading {
-    font-size: 26px;
+    font-size: 20px;
     font-weight: bold;
 }
 
-.learnBtn {
+.text {
+    font-size: medium;
+}
+
+.price {
+    color: grey;
+}
+
+.susAltHeading {
+    color: #616E71;
+}
+
+/* pass/fail descriptors */
+.sustainable {
+    width: 360px;
+    height: 30px;
+    background-color: #1C9988;
     color: white;
-    background-color: black;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 3px;
+}
+
+.unsustainable {
+    width: 360px;
+    height: 30px;
+    background-color: #D86A6A;
+    color: white;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.pass {
+    color: #01988F;
+}
+
+.fail {
+    color: #D86A6A;
 }
 
 /* Columns */
 .categoryColumn {
     float: left;
     width: 46%;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+.altsColumn {
+    float: left;
+    width: 36%;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+.arrowColumn {
+    float: left;
+    width: 6%;
     margin-left: 2%;
     margin-right: 2%;
 }
@@ -26,6 +82,14 @@
 
 
 /* Styling for category buttons */
+button {
+    padding: 8px;
+    width: 150px;
+    font-size: 14px;
+    margin-bottom: 8px;
+    border-style: none;
+}
+
 .transparency {
     color: white;
     background-color: #931B46;
@@ -59,4 +123,9 @@
 .plasticFree {
     color: white;
     background-color: #6069B6;
+}
+
+.learnBtn {
+    color: white;
+    background-color: black;
 }
