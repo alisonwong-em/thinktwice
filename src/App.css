@@ -1,16 +1,7 @@
 .App {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+  width: 460px;
+    /* background-color: #fafafa; */
 }
 
 .App-header {
@@ -28,11 +19,59 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+* {box-sizing: border-box}
+
+/* TABS */
+.tabCol {
+  float: left;
+  width: 14%;
+  margin-top: 6px;
 }
+
+.mainCol {
+  float: left;
+  width: 84%;
+  margin: -10px 5px 8px 0px;
+}
+
+.tabTxt {
+  margin-bottom: -30px;
+  text-align: center;
+  transform: rotate(-90deg);
+}
+
+.tab {
+  background-color: #c4c4c4;
+  color: black;
+  width: 80%;
+  height: 130px;
+  border: none;
+  outline: none;
+  box-shadow: 0px 4px 8px #888888;
+  margin-left: 20%;
+  margin-bottom: 4px;
+}
+
+.activeTab {
+  background-color: #faf9f8;
+  color: black;
+  width: 80%;
+  height: 130px;
+  border: none;
+  outline: none;
+  box-shadow: 0px 4px 8px #888888;
+  margin-left: 20%;
+  margin-bottom: 4px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Change background color of buttons on hover */
+/* .tab button:hover {
+  background-color: #ddd;
+} */
