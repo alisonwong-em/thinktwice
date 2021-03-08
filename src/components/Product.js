@@ -10,7 +10,7 @@ class Product extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      categoryText: 'Description of Product',
+      categoryText: 'H&M scores a A- in this category',
       hovering: false,
       pass: false,
     }
@@ -101,7 +101,7 @@ class Product extends React.Component {
         }
 
         <button className='learnBtn'>
-          <a href="www.thinktwice.eco" target="_blank">
+          <a href="https://xenodochial-rosalind-8f6d27.netlify.app/about" target="_blank">
             Learn More
           </a>
         </button>
