@@ -25,7 +25,7 @@ class Brand extends React.Component {
   }
 
   transHover() {
-    this.setState({ hovering: true, pass: false, categoryText: 'Gap scores a B in this category' });
+    this.setState({ hovering: true, pass: true, categoryText: 'Gap scores a B in this category' });
   }
 
   susEffHover() {
@@ -33,11 +33,11 @@ class Brand extends React.Component {
   }
 
   envImpHover() {
-    this.setState({ hovering: true, pass: false, categoryText: 'Gap scores a D+ in this category' });
+    this.setState({ hovering: true, pass: true, categoryText: 'Gap scores a A- in this category' });
   }
 
   ethLabHover() {
-    this.setState({ hovering: true, pass: true, categoryText: 'Gap scores a A- in this category' });
+    this.setState({ hovering: true, pass: false, categoryText: 'Gap scores a D+ in this category' });
   }
 
   categoryLeave() {
