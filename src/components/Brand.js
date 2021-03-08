@@ -84,25 +84,30 @@ class Brand extends React.Component {
 
         <h3 className='thinkTwiceTxt'><em>Think Twice about the necessity of this purchase</em></h3>
         {/* Sustainable Alternatives */}
-        <h2 className='susAltHeading'>Sustainable Alternatives   <img src={CircleCheck}/></h2>
-        <div class='row' align='center'>
-          {/* <div class='arrowColumn'>
-            <input type="image" src={LeftArrow} />
-          </div> */}
-          <div className='leftAltCol'>
-            <img src={PatagoniaLogo} className='altImg'/>
-            <p className='text'>Patagonia</p>
+        {sustainable ?
+        <div/>
+        :
+          <div>
+            <h2 className='susAltHeading'>Sustainable Alternatives   <img src={CircleCheck}/></h2>
+            <div class='row' align='center'>
+              {/* <div class='arrowColumn'>
+                <input type="image" src={LeftArrow} />
+              </div> */}
+              <div className='leftAltCol'>
+                <img src={PatagoniaLogo} className='altImg'/>
+                <p className='text'>Patagonia</p>
+              </div>
+              <div className='rightAltCol'>
+                <img src={AdidasLogo} className='altImg'/>
+                <p className='text'>Adidas</p>
+              </div>
+              {/* <div class='arrowColumn'>
+                <input type="image" src={RightArrow} />
+              </div> */}
+            </div>
           </div>
-          <div className='rightAltCol'>
-            <img src={AdidasLogo} className='altImg'/>
-            <p className='text'>Adidas</p>
-          </div>
-          {/* <div class='arrowColumn'>
-            <input type="image" src={RightArrow} />
-          </div> */}
-        </div>
+        }
 
-        {/* STUFF GOES HERE */}
         <button className='learnBtn'>
           <a href="www.thinktwice.eco" target="_blank">
             Learn More
