@@ -17,6 +17,6 @@ If there are any errors when opening or running the extension, an "Errors" butto
 
 If any changes are made in code, you need to rebuild the project and reload it. Run this command to build the project:
 
-npm run build
+**npm run build**
 
 Then open **chrome://extensions/** and click the reload button. Then chrome extension should be updated to the new version.
