@@ -12,7 +12,7 @@ class Brand extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      categoryText: 'Description of Brand',
+      categoryText: 'Gap is working towards becoming carbon neutral and also eliminating single-use plastic. In additon they aim to improve the working conditions of their factories.',
       hovering: false,
       pass: true,
     }
@@ -25,28 +25,28 @@ class Brand extends React.Component {
   }
 
   transHover() {
-    this.setState({ hovering: true, pass: true, categoryText: 'H&M scores a A- in this category' });
+    this.setState({ hovering: true, pass: false, categoryText: 'Gap scores a B in this category' });
   }
 
   susEffHover() {
-    this.setState({ hovering: true, pass: true, categoryText: 'H&M is part of various' });
+    this.setState({ hovering: true, pass: true, categoryText: 'Gap is part of various efforts to adress sustainability. This can be confirmed through sustainability information provided on their website.' });
   }
 
   envImpHover() {
-    this.setState({ hovering: true, pass: true, categoryText: 'H&M scores a A+ in this category' });
+    this.setState({ hovering: true, pass: false, categoryText: 'Gap scores a D+ in this category' });
   }
 
   ethLabHover() {
-    this.setState({ hovering: true, pass: false, categoryText: 'H&M scores a C- in this category' });
+    this.setState({ hovering: true, pass: true, categoryText: 'Gap scores a A- in this category' });
   }
 
   categoryLeave() {
-    this.setState({ hovering: false, categoryText: 'Description of Product' });
+    this.setState({ hovering: false, categoryText: 'Gap is working towards becoming carbon neutral and also eliminating single-use plastic. In additon they aim to improve the working conditions of their factories.' });
   }
 
   render() {
   // These would change based on info fetched from DB
-  let brandName = 'H&M';
+  let brandName = 'Gap';
   let sustainable = false;
   let { hovering, pass, categoryText } = this.state;
 

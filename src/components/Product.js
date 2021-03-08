@@ -6,11 +6,16 @@ import CircleCheck from '../assets/img/circlecheck.svg';
 // import RightArrow from '../assets/img/rightarrow.png';
 import './Pages.css';
 
+
+// First result when searching "black sweater" on gap's website
+// https://www.gapcanada.ca/browse/product.do?pid=647909013&pcid=999&vid=1&&searchText=black%20sweater#pdp-page-content
+
+
 class Product extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      categoryText: 'Description of Product',
+      categoryText: '',
       hovering: false,
       pass: false,
     }
@@ -22,24 +27,24 @@ class Product extends React.Component {
   }
 
   recycleHover() {
-    this.setState({ hovering: true, pass: true, categoryText: 'H&M scores a A- in this category' });
+    this.setState({ hovering: true, pass: true, categoryText: '' });
   }
 
   organicHover() {
-    this.setState({ hovering: true, pass: true, categoryText: 'H&M is part of various' });
+    this.setState({ hovering: true, pass: true, categoryText: '' });
   }
 
   plasticHover() {
-    this.setState({ hovering: true, pass: true, categoryText: 'H&M scores a A+ in this category' });
+    this.setState({ hovering: true, pass: true, categoryText: '' });
   }
 
   categoryLeave() {
-    this.setState({ hovering: false, categoryText: 'Description of Product' });
+    this.setState({ hovering: false, categoryText: '' });
   }
 
   render() {
   // These would change based on info fetched from DB
-  let productName = 'Turtleneck Sweater';
+  let productName = 'True Soft Textured Crewneck Sweater';
   let sustainable = false;
   let { hovering, pass, categoryText } = this.state;
 
