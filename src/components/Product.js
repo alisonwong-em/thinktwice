@@ -6,11 +6,14 @@ import CircleCheck from '../assets/img/circlecheck.svg';
 // import RightArrow from '../assets/img/rightarrow.png';
 import './Pages.css';
 
+// https://www.patagonia.ca/product/womens-long-sleeved-capilene-cool-merino-shirt/44555.html?dwvar_44555_color=UPBL&cgid=womens-t-shirts-long-sleeve
+// Found by going to women's>t-shirts>first one under long-sleeve
+
 class Product extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      categoryText: 'Description of Product',
+      categoryText: 'A breathable merino technical top, designed to naturally regulate your temperature, control odor and keep you comfortable when you’re working hard in the widest range of conditions.',
       hovering: false,
       pass: false,
     }
@@ -22,25 +25,25 @@ class Product extends React.Component {
   }
 
   recycleHover() {
-    this.setState({ hovering: true, pass: true, categoryText: 'H&M scores a A- in this category' });
+    this.setState({ hovering: true, pass: true, categoryText: '' });
   }
 
   organicHover() {
-    this.setState({ hovering: true, pass: true, categoryText: 'H&M is part of various' });
+    this.setState({ hovering: true, pass: true, categoryText: '' });
   }
 
   plasticHover() {
-    this.setState({ hovering: true, pass: true, categoryText: 'H&M scores a A+ in this category' });
+    this.setState({ hovering: true, pass: true, categoryText: '' });
   }
 
   categoryLeave() {
-    this.setState({ hovering: false, categoryText: 'Description of Product' });
+    this.setState({ hovering: false, categoryText: 'A breathable merino technical top, designed to naturally regulate your temperature, control odor and keep you comfortable when you’re working hard in the widest range of conditions.' });
   }
 
   render() {
   // These would change based on info fetched from DB
-  let productName = 'Turtleneck Sweater';
-  let sustainable = false;
+  let productName = 'Long-Sleeved Capilene® Cool Merino Shirt';
+  let sustainable = true;
   let { hovering, pass, categoryText } = this.state;
 
   return (

@@ -12,7 +12,7 @@ class Brand extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      categoryText: 'Description of Brand',
+      categoryText: 'Patagonia puts 1% of sales towards restoration of the environment. They are dedicated to consuming less and reducing water. They also enforce their responsibility in taking care of the environment and their workers.',
       hovering: false,
       pass: true,
     }
@@ -25,29 +25,29 @@ class Brand extends React.Component {
   }
 
   transHover() {
-    this.setState({ hovering: true, pass: true, categoryText: 'H&M scores a A- in this category' });
+    this.setState({ hovering: true, pass: true, categoryText: 'Patagonia scores a A- in this category' });
   }
 
   susEffHover() {
-    this.setState({ hovering: true, pass: true, categoryText: 'H&M is part of various' });
+    this.setState({ hovering: true, pass: true, categoryText: 'Patagonia is part of various efforts to adress sustainability. This can be confirmed through sustainability information provided on their website.' });
   }
 
   envImpHover() {
-    this.setState({ hovering: true, pass: true, categoryText: 'H&M scores a A+ in this category' });
+    this.setState({ hovering: true, pass: true, categoryText: 'Patagonia scores a A+ in this category' });
   }
 
   ethLabHover() {
-    this.setState({ hovering: true, pass: false, categoryText: 'H&M scores a C- in this category' });
+    this.setState({ hovering: true, pass: true, categoryText: 'Patagonia scores a B in this category' });
   }
 
   categoryLeave() {
-    this.setState({ hovering: false, categoryText: 'Description of Product' });
+    this.setState({ hovering: false, categoryText: 'Patagonia puts 1% of sales towards restoration of the environment. They are dedicated to consuming less and reducing water. They also enforce their responsibility in taking care of the environment and their workers.' });
   }
 
   render() {
   // These would change based on info fetched from DB
-  let brandName = 'H&M';
-  let sustainable = false;
+  let brandName = 'Patagonia';
+  let sustainable = true;
   let { hovering, pass, categoryText } = this.state;
 
   return (
