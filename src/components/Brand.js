@@ -46,7 +46,7 @@ class Brand extends React.Component {
   }
 
   ethLabActive() {
-    this.setState({ pass: false, categoryText: 'Patagonia scores a B in this category', transActive: false, susEffActive: false, envImpActive: false, ethLabActive: true });
+    this.setState({ pass: true, categoryText: 'Patagonia scores a B in this category', transActive: false, susEffActive: false, envImpActive: false, ethLabActive: true });
   }
 
   render() {
