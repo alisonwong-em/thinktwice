@@ -13,8 +13,8 @@ class Product extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      categoryText: 'H&M scores a A- in this category',
-      pass: false,
+      categoryText: 'Made with 95% recycled cashmere.',
+      pass: true,
       recMatActive: true,
       orgMatActive: false,
       plasFreeActive: false,
@@ -26,21 +26,21 @@ class Product extends React.Component {
   }
 
   recMatActive() {
-    this.setState({ pass: true, categoryText: 'H&M scores a A- in this category', recMatActive: true, orgMatActive: false, plasFreeActive: false });
+    this.setState({ pass: true, categoryText: 'Made with 95% recycled cashmere.', recMatActive: true, orgMatActive: false, plasFreeActive: false });
   }
 
   orgMatActive() {
-    this.setState({ pass: true, categoryText: 'H&M is part of various', recMatActive: false, orgMatActive: true, plasFreeActive: false });
+    this.setState({ pass: true, categoryText: '95% of this item is organic cashmere.', recMatActive: false, orgMatActive: true, plasFreeActive: false });
   }
 
   plasFreeActive() {
-    this.setState({ pass: true, categoryText: 'H&M scores a A+ in this category', recMatActive: false, orgMatActive: false, plasFreeActive: true });
+    this.setState({ pass: true, categoryText: '0% of this product is made of plastic.', recMatActive: false, orgMatActive: false, plasFreeActive: true });
   }
 
   render() {
     // These would change based on info fetched from DB
-    let productName = 'Turtleneck Sweater';
-    let sustainable = false;
+    let productName = 'Recycled Cashmere Turtleneck';
+    let sustainable = true;
     let { pass, categoryText, recMatActive, orgMatActive, plasFreeActive } = this.state;
 
     return (
