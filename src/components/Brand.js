@@ -134,7 +134,7 @@ class Brand extends React.Component {
           }
 
           <button className='learnBtn'>
-            <a href="https://xenodochial-rosalind-8f6d27.netlify.app/about" target="_blank">
+            <a href="https://xenodochial-rosalind-8f6d27.netlify.app/about" target="_blank" className="learnMoreLink">
               Learn More
             </a>
           </button>
