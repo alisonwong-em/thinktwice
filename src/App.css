@@ -1,6 +1,7 @@
 .App {
   text-align: center;
   width: 460px;
+  background-color: #FAF9F8;
 }
 
 * {box-sizing: border-box}
@@ -9,13 +10,12 @@
 .tabCol {
   float: left;
   width: 12%;
-  height: 50%;
 }
 
 .mainCol {
   float: left;
   width: 88%;
-  margin-top: -12px;
+  margin-top: -16px;
 }
 
 .tabTxt {
