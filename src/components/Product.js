@@ -4,6 +4,8 @@ import ThumbsDown from '../assets/img/thumbsdown.svg';
 import CircleCheck from '../assets/img/circlecheck.svg';
 // import LeftArrow from '../assets/img/leftarrow.png';
 // import RightArrow from '../assets/img/rightarrow.png';
+import PatagoniaAlt from '../assets/img/alts/patagoniaAlt.png';
+import AdidasAlt from '../assets/img/alts/adidasAlt.png';
 import './Pages.css';
 
 
@@ -28,20 +30,20 @@ class Product extends React.Component {
   }
 
   recMatActive() {
-    this.setState({ pass: true, categoryText: 'H&M scores a A- in this category', recMatActive: true, orgMatActive: false, plasFreeActive: false });
+    this.setState({ pass: false, categoryText: 'Made with 0% recycled material.', recMatActive: true, orgMatActive: false, plasFreeActive: false });
   }
 
   orgMatActive() {
-    this.setState({ pass: true, categoryText: 'H&M is part of various', recMatActive: false, orgMatActive: true, plasFreeActive: false });
+    this.setState({ pass: false, categoryText: '0% of the item is organic.', recMatActive: false, orgMatActive: true, plasFreeActive: false });
   }
 
   plasFreeActive() {
-    this.setState({ pass: true, categoryText: 'H&M scores a A+ in this category', recMatActive: false, orgMatActive: false, plasFreeActive: true });
+    this.setState({ pass: false, categoryText: '44% of the item is made of plastic.', recMatActive: false, orgMatActive: false, plasFreeActive: true });
   }
 
   render() {
     // These would change based on info fetched from DB
-    let productName = 'Turtleneck Sweater';
+    let productName = 'Supersoft Brushed Turtleneck Sweater Gap';
     let sustainable = false;
     let { pass, categoryText, recMatActive, orgMatActive, plasFreeActive } = this.state;
 
@@ -100,14 +102,14 @@ class Product extends React.Component {
                 <input type="image" src={LeftArrow} />
               </div> */}
               <div className='leftAltCol'>
-                {/* <img /> */}
-                <p className='text'>Patagonia Sweater</p>
+                <a href="https://www.patagonia.ca/product/womens-recycled-cashmere-turtleneck-sweater/50715.html?dwvar_50715_color=FEA&cgid=womens-sweaters" target="_blank"><img src={PatagoniaAlt} className='altImg'/></a>
+                <a href="https://www.patagonia.ca/product/womens-recycled-cashmere-turtleneck-sweater/50715.html?dwvar_50715_color=FEA&cgid=womens-sweaters" target="_blank"><p className='text'>Patagonia Sweater</p></a>
                 <p className='price'>$315.00</p>
               </div>
               <div className='rightAltCol'>
-                {/* <img /> */}
-                <p className='text'>Adidas Sweater</p>
-                <p className='price'>$75.99</p>
+                <a href="https://www.adidas.ca/en/essentials-comfort-funnel-neck-sweatshirt/GD2594.html" target="_blank"><img src={AdidasAlt} className='altImg'/></a>
+                <a href="https://www.adidas.ca/en/essentials-comfort-funnel-neck-sweatshirt/GD2594.html" target="_blank"><p className='text'>Adidas Sweater</p></a>
+                <p className='price'>$55.00</p>
               </div>
               {/* <div class='arrowColumn'>
                 <input type="image" src={RightArrow} />
@@ -117,7 +119,7 @@ class Product extends React.Component {
           }
 
           <button className='learnBtn'>
-            <a href="https://xenodochial-rosalind-8f6d27.netlify.app/about" target="_blank">
+            <a href="https://xenodochial-rosalind-8f6d27.netlify.app/about" target="_blank" className="learnMoreLink">
               Learn More
             </a>
           </button>

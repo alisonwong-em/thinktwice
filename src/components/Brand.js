@@ -19,7 +19,7 @@ class Brand extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      categoryText: 'H&M scores a A- in this category',
+      categoryText: 'Gap scores a B in this category',
       pass: true,
       transActive: true,
       susEffActive: false,
@@ -123,8 +123,8 @@ class Brand extends React.Component {
                   <a href="https://www.patagonia.ca/home/" target="_blank"><p className='text'>Patagonia</p></a>
                 </div>
                 <div className='rightAltCol'>
-                  <a href="https://www.gapcanada.ca/" target="_blank"><img src={AdidasLogo} className='altImg'/></a>
-                  <a href="https://www.gapcanada.ca/" target="_blank"><p className='text'>Adidas</p></a>
+                  <a href="https://www.adidas.ca/en" target="_blank"><img src={AdidasLogo} className='altImg'/></a>
+                  <a href="https://www.adidas.ca/en" target="_blank"><p className='text'>Adidas</p></a>
                 </div>
                 {/* <div class='arrowColumn'>
                   <input type="image" src={RightArrow} />
@@ -134,7 +134,7 @@ class Brand extends React.Component {
           }
 
           <button className='learnBtn'>
-            <a href="https://xenodochial-rosalind-8f6d27.netlify.app/about" target="_blank">
+            <a href="https://xenodochial-rosalind-8f6d27.netlify.app/about" target="_blank" className="learnMoreLink">
               Learn More
             </a>
           </button>

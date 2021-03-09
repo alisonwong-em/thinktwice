@@ -4,12 +4,18 @@
 }
 
 a { 
-    color:white;
+    color:black;
+}
+
+.learnMoreLink {
+    color: white;
 }
 
 .heading {
     padding-top: 8px;
     font-size: 20px;
+    margin-left: 4px;
+    margin-right: 4px;
     font-weight: bold;
 }
 
@@ -34,8 +40,10 @@ a {
 }
 
 .altImg {
-    margin-top: -14px;
+    margin-top: -12px;
     margin-bottom: -20px;
+    width: 130px;
+    height: 130px;
 }
 
 /* pass/fail descriptors */
