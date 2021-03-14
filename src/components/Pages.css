@@ -133,9 +133,10 @@ button {
 
 .learnBtn {
     color: white;
-    background-color: black;
+    background-color: #1C7399;
     margin-top: 20px;
     margin-bottom: 20px;
+    width: 250px;
 }
 
 .transparency {
