@@ -51,8 +51,8 @@ class Product extends React.Component {
       <div className='mainContent'>
         <h2 className='heading'>{productName}</h2>
         {sustainable ? 
-        <div class='sustainable'>Sustainable</div>
-        : <div class='unsustainable'>Unsustainable</div>
+        <div class='sustainable'>This product is Sustainable</div>
+        : <div class='unsustainable'>This product is Unsustainable</div>
         }
         <div>
           <div class='row' align='center'>
@@ -86,11 +86,28 @@ class Product extends React.Component {
               }
             </div>
             <div class='categoryColumn'>
-              <p className='text'>{pass ? <b className='pass'>Pass <img src={ThumbsUp}/>: </b> : <b className='fail'>Fail <img src={ThumbsDown}/>: </b>}{categoryText}</p>
+              <p className='text'>
+                  {pass ? 
+                    <b className='pass'>PASS <img src={ThumbsUp}/>: </b> 
+                    : 
+                    <b className='fail'>FAIL <img src={ThumbsDown}/>: </b>
+                  }
+                  {categoryText}
+                  <br/>
+                </p>
+                {pass ?
+                  <p className='text'>
+                    A category pass means the product has a B- ranking or higher in each category
+                  </p>
+                  :
+                  <p className='text'>
+                    A category fail means the product does not have a B- ranking or higher in the failed category
+                  </p>
+                }
+              </div>
             </div>
-          </div>
 
-          <h3 className='thinkTwiceTxt'><em>Think Twice about the necessity of this purchase</em></h3>
+          <h3 className='thinkTwiceTxt'><em>Do you really need this? Think twice!</em></h3>
           {/* Sustainable Alternatives */}
           {sustainable ?
           <div/>
@@ -120,7 +137,7 @@ class Product extends React.Component {
 
           <button className='learnBtn'>
             <a href="https://xenodochial-rosalind-8f6d27.netlify.app/about" target="_blank" className="learnMoreLink">
-              Learn More
+              Learn More About Think Twice
             </a>
           </button>
         </div>
