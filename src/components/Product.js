@@ -17,7 +17,7 @@ class Product extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      categoryText: 'H&M scores a A- in this category',
+      categoryText: 'Made with 0% recycled material.',
       pass: false,
       recMatActive: true,
       orgMatActive: false,
