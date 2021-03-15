@@ -25,6 +25,9 @@ class Brand extends React.Component {
       susEffActive: false,
       envImpActive: false,
       ethLabActive: false,
+      test: "",
+      brandResponse: [],
+      // brandResponse: {id: null, name:"", transparency: null, worker_emp: null, env_mgmt: null, url: null},
     }
 
     this.transActive = this.transActive.bind(this);
@@ -49,6 +52,21 @@ class Brand extends React.Component {
     this.setState({ pass: false, categoryText: 'H&M scores a C- in this category', transActive: false, susEffActive: false, envImpActive: false, ethLabActive: true });
   }
 
+  onTermSubmit = () => {
+    console.log("HIIIIIII");
+    this.setState({test: "WOWOWOW"});
+    const brandName = "Gap"
+    fetch(`http://127.0.0.1:5000/get_brand_data?brand=${brandName}`)
+      .then(response => response.json())
+      // .then(data => console.log(data));
+      .then(data => this.setState({
+        brandResponse: data
+      }))
+      .catch(error => console.log(error));
+      // .then(data => this.setState({brandResponse: {id: data.id, name: data.name, transparency: data.transparency, worker_emp: data.worker_emp, env_mgmt: data.env_mgmt, url: data.url}}));
+    console.log("FETCH DONE");
+  }
+
   render() {
     // These would change based on info fetched from DB
     let brandName = 'H&M';
@@ -58,6 +76,9 @@ class Brand extends React.Component {
     return (
       <div className='mainContent'>
         <h2 className='heading'>{brandName}</h2>
+        <h1 onClick={this.onTermSubmit}>HI</h1>
+        <div>{this.state.test}</div>
+        <div>{console.log(this.state.brandResponse)}</div>
         {sustainable ? 
         <div class='sustainable'>Sustainable</div>
         : <div class='unsustainable'>Unsustainable</div>
