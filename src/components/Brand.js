@@ -19,7 +19,7 @@ class Brand extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      categoryText: 'H&M scores a A- in this category',
+      categoryText: 'Gap scores a B in this category',
       pass: true,
       transActive: true,
       susEffActive: false,
@@ -34,24 +34,24 @@ class Brand extends React.Component {
   }
 
   transActive() {
-    this.setState({ pass: true, categoryText: 'H&M scores a A- in this category', transActive: true, susEffActive: false, envImpActive: false, ethLabActive: false });
+    this.setState({ pass: true, categoryText: 'Gap scores a B in this category', transActive: true, susEffActive: false, envImpActive: false, ethLabActive: false });
   }
 
   susEffActive() {
-    this.setState({ pass: true, categoryText: 'H&M is part of various efforts to address sustainability. This can be confirmed through sustainability information provided on their website', transActive: false, susEffActive: true, envImpActive: false, ethLabActive: false });
+    this.setState({ pass: true, categoryText: 'Gap is part of various efforts to adress sustainability. This can be confirmed through sustainability information provided on their website.', transActive: false, susEffActive: true, envImpActive: false, ethLabActive: false });
   }
 
   envImpActive() {
-    this.setState({ pass: true, categoryText: 'H&M scores a A+ in this category', transActive: false, susEffActive: false, envImpActive: true, ethLabActive: false });
+    this.setState({ pass: true, categoryText: 'Gap scores a A- in this category', transActive: false, susEffActive: false, envImpActive: true, ethLabActive: false });
   }
 
   ethLabActive() {
-    this.setState({ pass: false, categoryText: 'H&M scores a C- in this category', transActive: false, susEffActive: false, envImpActive: false, ethLabActive: true });
+    this.setState({ pass: false, categoryText: 'Gap scores a D+ in this category', transActive: false, susEffActive: false, envImpActive: false, ethLabActive: true });
   }
 
   render() {
     // These would change based on info fetched from DB
-    let brandName = 'H&M';
+    let brandName = 'Gap';
     let sustainable = false;
     let { pass, categoryText, transActive, susEffActive, envImpActive, ethLabActive } = this.state;
 
