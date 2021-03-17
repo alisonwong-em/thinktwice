@@ -90,11 +90,11 @@ class Product extends React.Component {
                 </p>
                 {pass ?
                   <p className='text'>
-                    A category pass means the product has a B- ranking or higher in each category
+                    A category pass means the product has met the category benchmark
                   </p>
                   :
                   <p className='text'>
-                    A category fail means the product does not have a B- ranking or higher in the failed category
+                    A category fail means the product has not met the category benchmark
                   </p>
                 }
               </div>

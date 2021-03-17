@@ -128,6 +128,21 @@ class Brand extends React.Component {
     let sustainable = false;
     const { brandName, pass, categoryText, transActive, susEffActive, envImpActive, ethLabActive, brandResponse } = this.state;
 
+    let categoryExplanation = '';
+    if(pass) {
+      if(susEffActive) {
+        categoryExplanation = 'A category pass means the brand has sustainable efforts';
+      } else {
+        categoryExplanation = 'A category pass means the brand has a B- ranking or higher in each category';
+      }
+    } else {
+      if(susEffActive) {
+        categoryExplanation = 'A category fail means the brand does not have sustainable efforts';
+      } else {
+        categoryExplanation = 'A category fail means the brand does not has a B- ranking or higher in the failed category';
+      }
+    }
+
     return (
       <div className='mainContent'>
         <h2 className='heading'>{brandName}</h2>
@@ -185,15 +200,7 @@ class Brand extends React.Component {
                 {categoryText}
                 <br/>
               </p>
-              {pass ?
-                <p className='text'>
-                  A category pass means the brand has a B- ranking or higher in each category
-                </p>
-                :
-                <p className='text'>
-                  A category fail means the brand does not has a B- ranking or higher in the failed category
-                </p>
-              }
+              <p className='text'>{categoryExplanation}</p>
             </div>
           </div>
 
