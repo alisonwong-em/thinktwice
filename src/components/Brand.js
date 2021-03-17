@@ -19,41 +19,114 @@ class Brand extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      categoryText: 'Gap scores a B in this category',
+      categoryText: '',
       pass: true,
       transActive: true,
       susEffActive: false,
       envImpActive: false,
       ethLabActive: false,
+      brandName: 'Gap',
+      // brandResponse: {id: null, name:"", transparency: null, worker_emp: null, env_mgmt: null, url: null},
+      brandResponse: [],
     }
 
     this.transActive = this.transActive.bind(this);
     this.susEffActive = this.susEffActive.bind(this);
     this.envImpActive = this.envImpActive.bind(this);
     this.ethLabActive = this.ethLabActive.bind(this);
+    this.convertToGrades = this.convertToGrades.bind(this);
+  }
+
+  componentDidMount() {
+    const { brandName } = this.state;
+    fetch(`http://127.0.0.1:5000/get_brand_data?brand=${brandName}`)
+    .then(response => response.json())
+    .then(data => this.setState({
+      brandResponse: data,
+      categoryText: `${data.name} scores a ${this.convertToGrades(data.transparency)} in this category`
+    }))
+    .catch(error => console.log(error));
   }
 
   transActive() {
-    this.setState({ pass: true, categoryText: 'Gap scores a B in this category', transActive: true, susEffActive: false, envImpActive: false, ethLabActive: false });
+    const { brandResponse } = this.state;
+    if(brandResponse !== []) {
+      this.setState({ pass: true, categoryText: `Gap scores a ${this.convertToGrades(brandResponse.transparency)} in this category`, transActive: true, susEffActive: false, envImpActive: false, ethLabActive: false });
+    }
   }
 
   susEffActive() {
-    this.setState({ pass: true, categoryText: 'Gap is part of various efforts to adress sustainability. This can be confirmed through sustainability information provided on their website.', transActive: false, susEffActive: true, envImpActive: false, ethLabActive: false });
+    this.setState({ pass: true, categoryText: `Gap is part of various efforts to adress sustainability. This can be confirmed through sustainability information provided on their website.`, transActive: false, susEffActive: true, envImpActive: false, ethLabActive: false });
   }
 
   envImpActive() {
-    this.setState({ pass: true, categoryText: 'Gap scores a A- in this category', transActive: false, susEffActive: false, envImpActive: true, ethLabActive: false });
+    const { brandResponse } = this.state;
+    if(brandResponse !== []) {
+      this.setState({ pass: true, categoryText: `Gap scores a ${this.convertToGrades(brandResponse.env_mgmt)} in this category`, transActive: false, susEffActive: false, envImpActive: true, ethLabActive: false });
+    }
   }
 
   ethLabActive() {
-    this.setState({ pass: false, categoryText: 'Gap scores a D+ in this category', transActive: false, susEffActive: false, envImpActive: false, ethLabActive: true });
+    const { brandResponse } = this.state;
+    if(brandResponse !== []) {
+      this.setState({ pass: false, categoryText: `Gap scores a ${this.convertToGrades(brandResponse.worker_emp)} in this category`, transActive: false, susEffActive: false, envImpActive: false, ethLabActive: true });
+    }
+  }
+
+  convertToGrades(gradeIdx) {
+    let grade = '';
+    switch(gradeIdx) {
+        case 0:
+            grade = 'F';
+            break;
+        case 1:
+            grade = 'D-';
+            break;
+        case 2:
+            grade = 'D';
+            break;
+        case 3:
+            grade = 'D+';
+            break;
+        case 4:
+            grade = 'C-';
+            break;
+        case 5:
+            grade = 'C';
+            break;
+        case 6:
+            grade = 'C+';
+            break;
+        case 7:
+            grade = 'B-';
+            break;
+        case 8:
+            grade = 'B';
+            break;
+        case 9:
+            grade = 'B+';
+            break;
+        case 10:
+            grade = 'A-';
+            break;
+        case 11:
+            grade = 'A';
+            break;
+        case 12:
+            grade = 'A+';
+            break;
+        default:
+            grade = '';
+            break;
+    }
+
+    return grade;
   }
 
   render() {
     // These would change based on info fetched from DB
-    let brandName = 'Gap';
     let sustainable = false;
-    let { pass, categoryText, transActive, susEffActive, envImpActive, ethLabActive } = this.state;
+    const { brandName, pass, categoryText, transActive, susEffActive, envImpActive, ethLabActive, brandResponse } = this.state;
 
     return (
       <div className='mainContent'>
