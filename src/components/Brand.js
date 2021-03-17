@@ -1,3 +1,4 @@
+/*global chrome*/
 import React from 'react';
 import ThumbsUp from '../assets/img/thumbsup.svg';
 import ThumbsDown from '../assets/img/thumbsdown.svg';
@@ -6,14 +7,8 @@ import PatagoniaLogo from '../assets/img/alts/patagoniaLogo.png';
 import AdidasLogo from '../assets/img/alts/adidasLogo.png';
 // import LeftArrow from '../assets/img/leftarrow.png';
 // import RightArrow from '../assets/img/rightarrow.png';
+import { getCurrentTab } from "../common/Utils";
 import './Pages.css';
-
-// $(document).ready(function(){
-//   $('body').on('click', 'a', function(){
-//     chrome.tabs.create({url: $(this).attr('href')});
-//     return false;
-//   });
-// });
 
 class Brand extends React.Component {
   constructor(props) {
@@ -25,7 +20,7 @@ class Brand extends React.Component {
       susEffActive: false,
       envImpActive: false,
       ethLabActive: false,
-      brandName: 'Gap',
+      brandName: '',
       // brandResponse: {id: null, name:"", transparency: null, worker_emp: null, env_mgmt: null, url: null},
       brandResponse: [],
     }
@@ -38,38 +33,78 @@ class Brand extends React.Component {
   }
 
   componentDidMount() {
-    const { brandName } = this.state;
-    fetch(`http://127.0.0.1:5000/get_brand_data?brand=${brandName}`)
-    .then(response => response.json())
-    .then(data => this.setState({
-      brandResponse: data,
-      categoryText: `${data.name} scores a ${this.convertToGrades(data.transparency)} in this category`
-    }))
-    .catch(error => console.log(error));
+    let brandName = '';
+
+    // Get the URL of the current tab the extension is being used on
+    getCurrentTab((tab) => {
+      // The response is the current tab's url
+      chrome.runtime.sendMessage({type: 'popupInit', tabUrl: tab.url}, (response) => {
+          if (response) {            
+            let brandUrl = response;
+
+            // Extract what the brand name is from the URL
+            
+            // If the brand is Old Navy url (since they don't have www. in their url)
+            if(brandUrl.indexOf('oldnavy') !== -1) {
+              // brandName = brandUrl.slice(0, brandUrl.indexOf('.'));
+              brandName = 'Old Navy'
+            } else {
+              // Looks for the period after the 'https://www.' or 'http://www.' to try to extract the actual name of the brand
+              brandName = brandUrl.slice(brandUrl.indexOf('.') + 1, brandUrl.indexOf('.', 12));
+              
+              // Switching the brand names to be capital because capitals are needed for the DB api
+              switch(brandName) {
+                case 'gapcanada':
+                  brandName = 'Gap';
+                  break;
+                case 'adidas':
+                  brandName = 'Adidas';
+                  break;
+                case 'patagonia':
+                  brandName = 'Patagonia';
+                  break;
+              }
+            }
+
+            this.setState({ brandName });
+
+            // Sends the brand name to the DB to get the brand info
+            fetch(`http://127.0.0.1:5000/get_brand_data?brand=${brandName}`)
+            .then(response => response.json())
+            .then(data => this.setState({
+              brandResponse: data,
+              categoryText: `${data.name} scores a ${this.convertToGrades(data.transparency)} in this category`
+            }))
+            .catch(error => console.log(error));
+          }
+      });
+    });    
   }
 
   transActive() {
-    const { brandResponse } = this.state;
+    const { brandName, brandResponse } = this.state;
     if(brandResponse !== []) {
-      this.setState({ pass: true, categoryText: `Gap scores a ${this.convertToGrades(brandResponse.transparency)} in this category`, transActive: true, susEffActive: false, envImpActive: false, ethLabActive: false });
+      this.setState({ pass: true, categoryText: `${brandName} scores a ${this.convertToGrades(brandResponse.transparency)} in this category`, transActive: true, susEffActive: false, envImpActive: false, ethLabActive: false });
     }
   }
 
   susEffActive() {
-    this.setState({ pass: true, categoryText: `Gap is part of various efforts to adress sustainability. This can be confirmed through sustainability information provided on their website.`, transActive: false, susEffActive: true, envImpActive: false, ethLabActive: false });
+    const { brandName } = this.state;
+    // TODO: make this dynamic
+    this.setState({ pass: true, categoryText: `${brandName} is part of various efforts to adress sustainability. This can be confirmed through sustainability information provided on their website.`, transActive: false, susEffActive: true, envImpActive: false, ethLabActive: false });
   }
 
   envImpActive() {
-    const { brandResponse } = this.state;
+    const { brandName, brandResponse } = this.state;
     if(brandResponse !== []) {
-      this.setState({ pass: true, categoryText: `Gap scores a ${this.convertToGrades(brandResponse.env_mgmt)} in this category`, transActive: false, susEffActive: false, envImpActive: true, ethLabActive: false });
+      this.setState({ pass: true, categoryText: `${brandName} scores a ${this.convertToGrades(brandResponse.env_mgmt)} in this category`, transActive: false, susEffActive: false, envImpActive: true, ethLabActive: false });
     }
   }
 
   ethLabActive() {
-    const { brandResponse } = this.state;
+    const { brandName, brandResponse } = this.state;
     if(brandResponse !== []) {
-      this.setState({ pass: false, categoryText: `Gap scores a ${this.convertToGrades(brandResponse.worker_emp)} in this category`, transActive: false, susEffActive: false, envImpActive: false, ethLabActive: true });
+      this.setState({ pass: false, categoryText: `${brandName} scores a ${this.convertToGrades(brandResponse.worker_emp)} in this category`, transActive: false, susEffActive: false, envImpActive: false, ethLabActive: true });
     }
   }
 
@@ -220,8 +255,8 @@ class Brand extends React.Component {
                   <a href="https://www.patagonia.ca/home/" target="_blank"><p className='text'>Patagonia</p></a>
                 </div>
                 <div className='rightAltCol'>
-                  <a href="https://www.gapcanada.ca/" target="_blank"><img src={AdidasLogo} className='altImg'/></a>
-                  <a href="https://www.gapcanada.ca/" target="_blank"><p className='text'>Adidas</p></a>
+                  <a href="https://www.adidas.ca/en" target="_blank"><img src={AdidasLogo} className='altImg'/></a>
+                  <a href="https://www.adidas.ca/en" target="_blank"><p className='text'>Adidas</p></a>
                 </div>
                 {/* <div class='arrowColumn'>
                   <input type="image" src={RightArrow} />
