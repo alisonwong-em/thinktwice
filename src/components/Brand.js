@@ -30,6 +30,7 @@ class Brand extends React.Component {
     this.envImpActive = this.envImpActive.bind(this);
     this.ethLabActive = this.ethLabActive.bind(this);
     this.convertToGrades = this.convertToGrades.bind(this);
+    this.categoryPass = this.categoryPass.bind(this);
   }
 
   componentDidMount() {
@@ -86,27 +87,55 @@ class Brand extends React.Component {
   transActive() {
     const { brandName, brandResponse } = this.state;
     if(brandResponse !== []) {
-      this.setState({ pass: true, categoryText: `${brandName} scores a ${this.convertToGrades(brandResponse.transparency)} in this category`, transActive: true, susEffActive: false, envImpActive: false, ethLabActive: false });
+      this.setState({ pass: this.categoryPass(brandResponse.transparency), categoryText: `${brandName} scores a ${this.convertToGrades(brandResponse.transparency)} in this category`, transActive: true, susEffActive: false, envImpActive: false, ethLabActive: false });
     }
   }
 
   susEffActive() {
     const { brandName } = this.state;
-    // TODO: make this dynamic
-    this.setState({ pass: true, categoryText: `${brandName} is part of various efforts to adress sustainability. This can be confirmed through sustainability information provided on their website.`, transActive: false, susEffActive: true, envImpActive: false, ethLabActive: false });
+    let pass = false;
+    // Pass/Fail depending on the brand
+    switch(brandName) {
+      case 'Gap':
+        pass = false;
+        break;
+      case 'Adidas':
+        pass = true;
+        break;
+      case 'Patagonia':
+        pass = true;
+        break;
+      case 'Old Navy':
+        pass = false;
+        break;
+      default:
+        pass = true;
+        break;
+    }
+
+    this.setState({ pass, categoryText: `${brandName} is part of various efforts to adress sustainability. This can be confirmed through sustainability information provided on their website.`, transActive: false, susEffActive: true, envImpActive: false, ethLabActive: false });
   }
 
   envImpActive() {
     const { brandName, brandResponse } = this.state;
     if(brandResponse !== []) {
-      this.setState({ pass: true, categoryText: `${brandName} scores a ${this.convertToGrades(brandResponse.env_mgmt)} in this category`, transActive: false, susEffActive: false, envImpActive: true, ethLabActive: false });
+      this.setState({ pass: this.categoryPass(brandResponse.env_mgmt), categoryText: `${brandName} scores a ${this.convertToGrades(brandResponse.env_mgmt)} in this category`, transActive: false, susEffActive: false, envImpActive: true, ethLabActive: false });
     }
   }
 
   ethLabActive() {
     const { brandName, brandResponse } = this.state;
     if(brandResponse !== []) {
-      this.setState({ pass: false, categoryText: `${brandName} scores a ${this.convertToGrades(brandResponse.worker_emp)} in this category`, transActive: false, susEffActive: false, envImpActive: false, ethLabActive: true });
+      this.setState({ pass: this.categoryPass(brandResponse.worker_emp), categoryText: `${brandName} scores a ${this.convertToGrades(brandResponse.worker_emp)} in this category`, transActive: false, susEffActive: false, envImpActive: false, ethLabActive: true });
+    }
+  }
+
+  categoryPass(grade) {
+    // If the catergory has a rating higher than or equal to a B- (which is a 7) then it passes
+    if(grade >= 7) {
+      return true;
+    } else {
+      return false;
     }
   }
 

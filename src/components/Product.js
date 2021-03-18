@@ -81,23 +81,31 @@ class Product extends React.Component {
     const { productDetailsResponse } = this.state;
     if(productDetailsResponse !== []) {
       let categoryText = '';
+      let totRecMatPercent = 0;
 
       // Meaning there is recycled material in the product
       if(productDetailsResponse.recycled_materials.length > 0) {
         categoryText += 'Made with ';
         for(let i = 0; i < productDetailsResponse.recycled_materials.length; i++) {
           if(i != 0) {
-            categoryText += ', '
+            categoryText += ', ';
           }
 
-          categoryText += `${productDetailsResponse.recycled_percents[i]}% recycled ${productDetailsResponse.recycled_materials[i]}`
+          categoryText += `${productDetailsResponse.recycled_percents[i]}% recycled ${productDetailsResponse.recycled_materials[i]}`;
+          totRecMatPercent += productDetailsResponse.recycled_percents[i];
         }
       } else {
         // If there is no recycled material in the product
         categoryText += 'Made with 0% recycled material';
       }
 
-      this.setState({ pass: true, categoryText, recMatActive: true, orgMatActive: false, plasFreeActive: false });
+      let pass = false;
+      // See if the product passes the benchmark of >20% recycled material for the material to pass the category
+      if(totRecMatPercent >= 20) {
+        pass = true;
+      }
+
+      this.setState({ pass, categoryText, recMatActive: true, orgMatActive: false, plasFreeActive: false });
     }
   }
 
@@ -105,22 +113,30 @@ class Product extends React.Component {
     const { productDetailsResponse } = this.state;
     if(productDetailsResponse !== []) {
       let categoryText = '';
+      let totOrgMatPercent = 0;
 
       // Meaning there is recycled materail in the product
       if(productDetailsResponse.organic_materials.length > 0) {
-        for(let i = 0; i < productDetailsResponse.recycled_materials.length; i++) {
+        for(let i = 0; i < productDetailsResponse.organic_materials.length; i++) {
           if(i != 0) {
             categoryText += ', ';
           }
 
-          categoryText += `${productDetailsResponse.organic_percents[i]}% of the product is organic ${productDetailsResponse.organic_materials[i]}`
+          categoryText += `${productDetailsResponse.organic_percents[i]}% of the product is organic ${productDetailsResponse.organic_materials[i]}`;
+          totOrgMatPercent += productDetailsResponse.organic_percents[i];
         }
       } else {
         // If there is no organic material in the product
         categoryText += '0% of this product is organic';
       }
 
-      this.setState({ pass: true, categoryText, recMatActive: false, orgMatActive: true, plasFreeActive: false });
+      let pass = false;
+      // See if the product passes the benchmark of >20% recycled material for the material to pass the category
+      if(totOrgMatPercent >= 95) {
+        pass = true;
+      }
+
+      this.setState({ pass, categoryText, recMatActive: false, orgMatActive: true, plasFreeActive: false });
     }
   }
 
@@ -128,13 +144,14 @@ class Product extends React.Component {
     const { productDetailsResponse } = this.state;
     if(productDetailsResponse !== []) {
       let categoryText = '';
+      let totPlasFreePercent = 0;
 
       // Meaning there is recycled materail in the product
-      if(productDetailsResponse.organic_materials.length > 0) {
+      if(productDetailsResponse.plastic_materials.length > 0) {
         categoryText += `${productDetailsResponse.plastic_percent}% of this product is made of plastic because of its `;
-        for(let i = 0; i < productDetailsResponse.recycled_materials.length; i++) {
+        for(let i = 0; i < productDetailsResponse.plastic_materials.length; i++) {
           if(i != 0) {
-            if(i === productDetailsResponse.recycled_materials.length -1) {
+            if(i === productDetailsResponse.plastic_materials.length -1) {
               categoryText += ', and ';
             } else {
               categoryText += ', ';
@@ -142,13 +159,20 @@ class Product extends React.Component {
           }
 
           categoryText += productDetailsResponse.plastic_materials[i];
+          totPlasFreePercent += productDetailsResponse.plastic_percents[i];
         }
       } else {
         // If there is no organic material in the product
         categoryText += '0% of this item is made of plastic';
       }
 
-      this.setState({ pass: true, categoryText, recMatActive: false, orgMatActive: false, plasFreeActive: true });
+      let pass = true;
+      // See if the product passes the benchmark of >20% recycled material for the material to pass the category
+      if(totPlasFreePercent > 0) {
+        pass = false;
+      }
+
+      this.setState({ pass, categoryText, recMatActive: false, orgMatActive: false, plasFreeActive: true });
     }
   }
 
