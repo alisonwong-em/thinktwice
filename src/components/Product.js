@@ -17,6 +17,7 @@ class Product extends React.Component {
       recMatActive: true,
       orgMatActive: false,
       plasFreeActive: false,
+      productNameResponse: [],
       productDetailsResponse: [],
     }
 
@@ -50,8 +51,16 @@ class Product extends React.Component {
               }
             }
 
-            // Sends the brand name to the DB to get the brand info
-            // fetch(`http://127.0.0.1:5000/scrape_product_details?brand=patagonia&url=https://www.patagonia.com/product/mens-recycled-cashmere-crewneck-sweater/50525.html?dwvar_50525_color=FGE`)
+            // Sends the brand name and product url to get the product name
+            fetch(`http://127.0.0.1:5000/scrape_product_name_overview?brand=${brandName}&url=${url}`)
+            .then(response => response.json())
+            .then(data => this.setState({
+                productNameResponse: data,
+              })
+            )
+            .catch(error => console.log(error));
+
+            // Sends the brand name and product url to get the product details
             fetch(`http://127.0.0.1:5000/scrape_product_details?brand=${brandName}&url=${url}`)
             .then(response => response.json())
             .then(data => {
@@ -145,13 +154,12 @@ class Product extends React.Component {
 
   render() {
     // These would change based on info fetched from DB
-    let productName = 'Turtleneck Sweater';
     let sustainable = false;
-    let { pass, categoryText, recMatActive, orgMatActive, plasFreeActive } = this.state;
+    let { pass, categoryText, recMatActive, orgMatActive, plasFreeActive, productNameResponse } = this.state;
 
     return (
       <div className='mainContent'>
-        <h2 className='heading'>{productName}</h2>
+        <h2 className='heading'>{productNameResponse.product_name}</h2>
         {sustainable ? 
         <div class='sustainable'>This product is Sustainable</div>
         : <div class='unsustainable'>This product is Unsustainable</div>
