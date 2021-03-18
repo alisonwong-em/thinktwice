@@ -1,20 +1,23 @@
+/*global chrome*/
 import React from 'react';
 import ThumbsUp from '../assets/img/thumbsup.svg';
 import ThumbsDown from '../assets/img/thumbsdown.svg';
 import CircleCheck from '../assets/img/circlecheck.svg';
 // import LeftArrow from '../assets/img/leftarrow.png';
 // import RightArrow from '../assets/img/rightarrow.png';
+import { getCurrentTab } from "../common/Utils";
 import './Pages.css';
 
 class Product extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      categoryText: 'H&M scores a A- in this category',
+      categoryText: '',
       pass: false,
       recMatActive: true,
       orgMatActive: false,
       plasFreeActive: false,
+      productDetailsResponse: [],
     }
 
     this.recMatActive = this.recMatActive.bind(this);
@@ -22,16 +25,122 @@ class Product extends React.Component {
     this.plasFreeActive = this.plasFreeActive.bind(this);
   }
 
+  componentDidMount() {
+    // Get the URL of the current tab the extension is being used on
+    getCurrentTab((tab) => {
+      // The response is the current tab's url
+      chrome.runtime.sendMessage({type: 'popupInit', tabUrl: tab.url}, (response) => {
+          if (response) {           
+            let url = response; 
+            let brandName = '';
+
+            // Extract what the brand name is from the URL
+            
+            // If the brand is Old Navy url (since they don't have www. in their url)
+            if(url.indexOf('oldnavy') !== -1) {
+              // brandName = brandUrl.slice(0, brandUrl.indexOf('.'));
+              brandName = 'Old Navy';
+            } else {
+              // Looks for the period after the 'https://www.' or 'http://www.' to try to extract the actual name of the brand
+              brandName = url.slice(url.indexOf('.') + 1, url.indexOf('.', 12));
+              
+              // Switching the brand names to be capital because capitals are needed for the DB api
+              if(brandName === 'gapcanada') {
+                brandName = 'gap';
+              }
+            }
+
+            // Sends the brand name to the DB to get the brand info
+            // fetch(`http://127.0.0.1:5000/scrape_product_details?brand=patagonia&url=https://www.patagonia.com/product/mens-recycled-cashmere-crewneck-sweater/50525.html?dwvar_50525_color=FGE`)
+            fetch(`http://127.0.0.1:5000/scrape_product_details?brand=${brandName}&url=${url}`)
+            .then(response => response.json())
+            .then(data => {
+              this.setState({
+                productDetailsResponse: data,
+              });
+
+              // Update the default catergory text
+              this.recMatActive();
+            })
+            .catch(error => console.log(error));
+          }
+      });
+    });    
+  }
+
   recMatActive() {
-    this.setState({ pass: true, categoryText: 'H&M scores a A- in this category', recMatActive: true, orgMatActive: false, plasFreeActive: false });
+    const { productDetailsResponse } = this.state;
+    if(productDetailsResponse !== []) {
+      let categoryText = '';
+
+      // Meaning there is recycled material in the product
+      if(productDetailsResponse.recycled_materials.length > 0) {
+        categoryText += 'Made with ';
+        for(let i = 0; i < productDetailsResponse.recycled_materials.length; i++) {
+          if(i != 0) {
+            categoryText += ', '
+          }
+
+          categoryText += `${productDetailsResponse.recycled_percents[i]}% recycled ${productDetailsResponse.recycled_materials[i]}`
+        }
+      } else {
+        // If there is no recycled material in the product
+        categoryText += 'Made with 0% recycled material';
+      }
+
+      this.setState({ pass: true, categoryText, recMatActive: true, orgMatActive: false, plasFreeActive: false });
+    }
   }
 
   orgMatActive() {
-    this.setState({ pass: true, categoryText: 'H&M is part of various', recMatActive: false, orgMatActive: true, plasFreeActive: false });
+    const { productDetailsResponse } = this.state;
+    if(productDetailsResponse !== []) {
+      let categoryText = '';
+
+      // Meaning there is recycled materail in the product
+      if(productDetailsResponse.organic_materials.length > 0) {
+        for(let i = 0; i < productDetailsResponse.recycled_materials.length; i++) {
+          if(i != 0) {
+            categoryText += ', ';
+          }
+
+          categoryText += `${productDetailsResponse.organic_percents[i]}% of the product is organic ${productDetailsResponse.organic_materials[i]}`
+        }
+      } else {
+        // If there is no organic material in the product
+        categoryText += '0% of this product is organic';
+      }
+
+      this.setState({ pass: true, categoryText, recMatActive: false, orgMatActive: true, plasFreeActive: false });
+    }
   }
 
   plasFreeActive() {
-    this.setState({ pass: true, categoryText: 'H&M scores a A+ in this category', recMatActive: false, orgMatActive: false, plasFreeActive: true });
+    const { productDetailsResponse } = this.state;
+    if(productDetailsResponse !== []) {
+      let categoryText = '';
+
+      // Meaning there is recycled materail in the product
+      if(productDetailsResponse.organic_materials.length > 0) {
+        categoryText += `${productDetailsResponse.plastic_percent}% of this product is made of plastic because of its `;
+        for(let i = 0; i < productDetailsResponse.recycled_materials.length; i++) {
+          if(i != 0) {
+            if(i === productDetailsResponse.recycled_materials.length -1) {
+              categoryText += ', and ';
+            } else {
+              categoryText += ', ';
+            }
+          }
+
+          categoryText += productDetailsResponse.plastic_materials[i];
+        }
+      } else {
+        // If there is no organic material in the product
+        categoryText += '0% of this item is made of plastic';
+      }
+
+      this.setState({ pass: true, categoryText, recMatActive: false, orgMatActive: false, plasFreeActive: true });
+    }
   }
 
   render() {

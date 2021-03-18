@@ -47,7 +47,7 @@ class Brand extends React.Component {
             // If the brand is Old Navy url (since they don't have www. in their url)
             if(brandUrl.indexOf('oldnavy') !== -1) {
               // brandName = brandUrl.slice(0, brandUrl.indexOf('.'));
-              brandName = 'Old Navy'
+              brandName = 'Old Navy';
             } else {
               // Looks for the period after the 'https://www.' or 'http://www.' to try to extract the actual name of the brand
               brandName = brandUrl.slice(brandUrl.indexOf('.') + 1, brandUrl.indexOf('.', 12));
@@ -73,7 +73,9 @@ class Brand extends React.Component {
             .then(response => response.json())
             .then(data => this.setState({
               brandResponse: data,
-              categoryText: `${data.name} scores a ${this.convertToGrades(data.transparency)} in this category`
+              // Update the default catergory text to match the fetched data - for the transparency category
+              categoryText: `${data.name} scores a ${this.convertToGrades(data.transparency)} in this category`,
+              transActive: true, susEffActive: false, envImpActive: false, ethLabActive: false
             }))
             .catch(error => console.log(error));
           }
