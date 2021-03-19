@@ -19,6 +19,7 @@ class Product extends React.Component {
       plasFreeActive: false,
       productNameResponse: [],
       productDetailsResponse: [],
+      loaded: false,
     }
 
     this.recMatActive = this.recMatActive.bind(this);
@@ -27,6 +28,8 @@ class Product extends React.Component {
   }
 
   componentDidMount() {
+    this.setState({ loaded: false });
+
     // Get the URL of the current tab the extension is being used on
     getCurrentTab((tab) => {
       // The response is the current tab's url
@@ -50,26 +53,55 @@ class Product extends React.Component {
               }
             }
 
-            // Sends the brand name and product url to get the product name
-            fetch(`http://127.0.0.1:5000/scrape_product_name_overview?brand=${brandName}&url=${url}`)
-            .then(response => response.json())
-            .then(data => this.setState({
-                productNameResponse: data,
-              })
-            )
-            .catch(error => console.log(error));
-
             // Sends the brand name and product url to get the product details
             fetch(`http://127.0.0.1:5000/scrape_product_details?brand=${brandName}&url=${url}`)
             .then(response => response.json())
             .then(data => {
-              this.setState({
-                productDetailsResponse: data,
-              });
-
-              // Update the default catergory text
-              this.recMatActive();
+              // Update the recycled material blurb
+              if(data !== []) {
+                let categoryText = '';
+                let totRecMatPercent = 0;
+          
+                // If there is no recycled material in the product
+                if(data.recycled_materials === undefined || data.recycled_materials === null || data.recycled_materials.length === 0) {
+                  categoryText += 'Made with 0% recycled material';
+                } else {
+                  // Meaning there is recycled material in the product
+                  categoryText += 'Made with ';
+                  for(let i = 0; i < data.recycled_materials.length; i++) {
+                    if(i != 0) {
+                      categoryText += ', ';
+                    }
+          
+                    categoryText += `${data.recycled_percents[i]}% recycled ${data.recycled_materials[i]}`;
+                    totRecMatPercent += data.recycled_percents[i];
+                  }
+                }
+          
+                let pass = false;
+                // See if the product passes the benchmark of >=20% recycled material for the material to pass the category
+                if(totRecMatPercent >= 20) {
+                  pass = true;
+                }
+              
+                this.setState({
+                  productDetailsResponse: data,
+                  pass, categoryText, recMatActive: true, orgMatActive: false, plasFreeActive: false
+                });
+              }
             })
+            .catch(error => console.log(error));
+
+            // Sends the brand name and product url to get the product name
+            fetch(`http://127.0.0.1:5000/scrape_product_name_overview?brand=${brandName}&url=${url}`)
+            .then(response => response.json())
+            .then(data => {
+              this.setState({
+                productNameResponse: data,
+                loaded: true,
+              })
+            }
+            )
             .catch(error => console.log(error));
           }
       });
@@ -174,103 +206,109 @@ class Product extends React.Component {
   }
 
   render() {
-    const { pass, categoryText, recMatActive, orgMatActive, plasFreeActive, productNameResponse, productDetailsResponse } = this.state;
+    const { loaded, pass, categoryText, recMatActive, orgMatActive, plasFreeActive, productNameResponse, productDetailsResponse } = this.state;
 
     return (
-      <div className='mainContent'>
-        <h2 className='heading'>{productNameResponse.product_name}</h2>
-        {productDetailsResponse.sus_rating ? 
-        <div class='sustainable'>This product is Sustainable</div>
-        : <div class='unsustainable'>This product is Unsustainable</div>
-        }
-        <div>
-          <div class='row' align='center'>
-            <div class='categoryColumn'>
-              {recMatActive ?
-                <button className='recMatActive' onMouseOver={this.recMatActive}>
-                  Recycled Material
-                </button>
-                :
-                <button className='recycleMat' onMouseOver={this.recMatActive}>
-                  Recycled Material
-                </button>
-              }
-              {orgMatActive ?
-                <button className='orgMatActive' onMouseEnter={this.orgMatActive}>
-                  Organic Material
-                </button>
-                :
-                <button className='orgMat' onMouseEnter={this.orgMatActive}>
-                  Organic Material
-                </button>
-              }
-              {plasFreeActive ?
-                <button className='plasFreeActive' onMouseEnter={this.plasFreeActive}>
-                  Plastic Free
-                </button>
-                :
-                <button className='plasticFree' onMouseEnter={this.plasFreeActive}>
-                  Plastic Free
-                </button>
-              }
-            </div>
-            <div class='categoryColumn'>
-              <p className='text'>
-                  {pass ? 
-                    <b className='pass'>PASS <img src={ThumbsUp}/>: </b> 
-                    : 
-                    <b className='fail'>FAIL <img src={ThumbsDown}/>: </b>
-                  }
-                  {categoryText}
-                  <br/>
-                </p>
-                {pass ?
-                  <p className='text'>
-                    A category pass means the product has met the category benchmark
-                  </p>
+      <div>
+      { loaded ?
+        <div className='mainContent'>
+          <h2 className='heading'>{productNameResponse.product_name}</h2>
+          {productDetailsResponse.sus_rating ? 
+          <div class='sustainable'>This product is Sustainable</div>
+          : <div class='unsustainable'>This product is Unsustainable</div>
+          }
+          <div>
+            <div class='row' align='center'>
+              <div class='categoryColumn'>
+                {recMatActive ?
+                  <button className='recMatActive' onMouseOver={this.recMatActive}>
+                    Recycled Material
+                  </button>
                   :
-                  <p className='text'>
-                    A category fail means the product has not met the category benchmark
-                  </p>
+                  <button className='recycleMat' onMouseOver={this.recMatActive}>
+                    Recycled Material
+                  </button>
+                }
+                {orgMatActive ?
+                  <button className='orgMatActive' onMouseEnter={this.orgMatActive}>
+                    Organic Material
+                  </button>
+                  :
+                  <button className='orgMat' onMouseEnter={this.orgMatActive}>
+                    Organic Material
+                  </button>
+                }
+                {plasFreeActive ?
+                  <button className='plasFreeActive' onMouseEnter={this.plasFreeActive}>
+                    Plastic Free
+                  </button>
+                  :
+                  <button className='plasticFree' onMouseEnter={this.plasFreeActive}>
+                    Plastic Free
+                  </button>
                 }
               </div>
-            </div>
-
-          <h3 className='thinkTwiceTxt'><em>Do you really need this? Think twice!</em></h3>
-          {/* Sustainable Alternatives */}
-          {productDetailsResponse.sus_rating ?
-            <div/>
-            :
-            <div>
-              <h2 className='susAltHeading'>Sustainable Alternatives <img src={CircleCheck}/></h2>
-              <div class='row' align='center'>
-                {/* <div class='arrowColumn'>
-                  <input type="image" src={LeftArrow} />
-                </div> */}
-                <div className='leftAltCol'>
-                  {/* <img /> */}
-                  <p className='text'>Patagonia Sweater</p>
-                  <p className='price'>$315.00</p>
+              <div class='categoryColumn'>
+                <p className='text'>
+                    {pass ? 
+                      <b className='pass'>PASS <img src={ThumbsUp}/>: </b> 
+                      : 
+                      <b className='fail'>FAIL <img src={ThumbsDown}/>: </b>
+                    }
+                    {categoryText}
+                    <br/>
+                  </p>
+                  {pass ?
+                    <p className='text'>
+                      A category pass means the product has met the category benchmark
+                    </p>
+                    :
+                    <p className='text'>
+                      A category fail means the product has not met the category benchmark
+                    </p>
+                  }
                 </div>
-                <div className='rightAltCol'>
-                  {/* <img /> */}
-                  <p className='text'>Adidas Sweater</p>
-                  <p className='price'>$75.99</p>
-                </div>
-                {/* <div class='arrowColumn'>
-                  <input type="image" src={RightArrow} />
-                </div> */}
               </div>
-            </div>
-          }
 
-          <button className='learnBtn'>
-            <a href="https://xenodochial-rosalind-8f6d27.netlify.app/about" target="_blank" className="learnMoreLink">
-              Learn More About Think Twice
-            </a>
-          </button>
+            <h3 className='thinkTwiceTxt'><em>Do you really need this? Think twice!</em></h3>
+            {/* Sustainable Alternatives */}
+            {productDetailsResponse.sus_rating ?
+              <div/>
+              :
+              <div>
+                <h2 className='susAltHeading'>Sustainable Alternatives <img src={CircleCheck}/></h2>
+                <div class='row' align='center'>
+                  {/* <div class='arrowColumn'>
+                    <input type="image" src={LeftArrow} />
+                  </div> */}
+                  <div className='leftAltCol'>
+                    {/* <img /> */}
+                    <p className='text'>Patagonia Sweater</p>
+                    <p className='price'>$315.00</p>
+                  </div>
+                  <div className='rightAltCol'>
+                    {/* <img /> */}
+                    <p className='text'>Adidas Sweater</p>
+                    <p className='price'>$75.99</p>
+                  </div>
+                  {/* <div class='arrowColumn'>
+                    <input type="image" src={RightArrow} />
+                  </div> */}
+                </div>
+              </div>
+            }
+
+            <button className='learnBtn'>
+              <a href="https://xenodochial-rosalind-8f6d27.netlify.app/about" target="_blank" className="learnMoreLink">
+                Learn More About Think Twice
+              </a>
+            </button>
+          </div>
         </div>
-      </div>
+        :
+        <div class="loader" />
+      }
+    </div>
   )}
 }
 

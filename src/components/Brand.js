@@ -24,6 +24,7 @@ class Brand extends React.Component {
       // brandResponse: {id: null, name:"", transparency: null, worker_emp: null, env_mgmt: null, url: null},
       brandResponse: [],
       sustainable: false,
+      loaded: false,
     }
 
     this.transActive = this.transActive.bind(this);
@@ -36,6 +37,7 @@ class Brand extends React.Component {
   }
 
   componentDidMount() {
+    this.setState({ loaded: false });
     let brandName = '';
 
     // Get the URL of the current tab the extension is being used on
@@ -82,6 +84,7 @@ class Brand extends React.Component {
               }
 
               this.setState({
+                loaded: true,
                 sustainable,
                 brandResponse: data,
                 // Update the default catergory text to match the fetched data - for the transparency category
@@ -206,7 +209,7 @@ class Brand extends React.Component {
   }
 
   render() {
-    const { sustainable, brandName, pass, categoryText, transActive, susEffActive, envImpActive, ethLabActive, brandResponse } = this.state;
+    const { loaded, sustainable, brandName, pass, categoryText, transActive, susEffActive, envImpActive, ethLabActive, brandResponse } = this.state;
 
     let categoryExplanation = '';
     if(pass) {
@@ -224,99 +227,105 @@ class Brand extends React.Component {
     }
 
     return (
-      <div className='mainContent'>
-        <h2 className='heading'>{brandName}</h2>
-        {sustainable ? 
-        <div class='sustainable'>This brand is Sustainable</div>
-        : <div class='unsustainable'>This brand is Unsustainable</div>
-        }
-        <div>
-          <div class='row' align='center'>
-            <div class='categoryColumn'>
-              {transActive ?
-                <button className='transActive' onMouseOver={this.transActive}>
-                  Transparency
-                </button>
-                :
-                <button className='transparency' onMouseOver={this.transActive}>
-                  Transparency
-                </button>
+      <div>
+        { loaded ?
+          <div className='mainContent'>
+            <h2 className='heading'>{brandName}</h2>
+            {sustainable ? 
+            <div class='sustainable'>This brand is Sustainable</div>
+            : <div class='unsustainable'>This brand is Unsustainable</div>
+            }
+            <div>
+              <div class='row' align='center'>
+                <div class='categoryColumn'>
+                  {transActive ?
+                    <button className='transActive' onMouseOver={this.transActive}>
+                      Transparency
+                    </button>
+                    :
+                    <button className='transparency' onMouseOver={this.transActive}>
+                      Transparency
+                    </button>
+                  }
+                  {susEffActive ?
+                    <button className='susEffActive' onMouseEnter={this.susEffActive}>
+                      Sustainability Efforts
+                    </button>
+                    :
+                    <button className='susEffort' onMouseEnter={this.susEffActive}>
+                      Sustainability Efforts
+                    </button>
+                  }
+                  {envImpActive ?
+                    <button className='envImpActive' onMouseEnter={this.envImpActive}>
+                      Environmental Impacts
+                    </button>
+                    :
+                    <button className='envImpact' onMouseEnter={this.envImpActive}>
+                      Environmental Impacts
+                    </button>
+                  }
+                  {ethLabActive ?
+                    <button className='ethLabActive' onMouseEnter={this.ethLabActive}>
+                      Ethical Labour
+                    </button>
+                    :
+                    <button className='ethLabour' onMouseEnter={this.ethLabActive}>
+                      Ethical Labour
+                    </button>
+                  }
+                </div>
+                <div class='categoryColumn'>
+                  <p className='text'>
+                    {pass ? 
+                      <b className='pass'>PASS <img src={ThumbsUp}/>: </b> 
+                      : 
+                      <b className='fail'>FAIL <img src={ThumbsDown}/>: </b>
+                    }
+                    {categoryText}
+                    <br/>
+                  </p>
+                  <p className='text'>{categoryExplanation}</p>
+                </div>
+              </div>
+
+              <h3 className='thinkTwiceTxt'><em>Do you really need this? Think twice!</em></h3>
+              {/* Sustainable Alternatives */}
+              {sustainable ?
+              <div/>
+              :
+                <div>
+                  <h2 className='susAltHeading'>Sustainable Alternatives   <img src={CircleCheck}/></h2>
+                  <div class='row' align='center'>
+                    {/* <div class='arrowColumn'>
+                      <input type="image" src={LeftArrow} />
+                    </div> */}
+                    <div className='leftAltCol'>
+                      <a href="https://www.patagonia.ca/home/" target="_blank"><img src={PatagoniaLogo} className='altImg'/></a>
+                      <a href="https://www.patagonia.ca/home/" target="_blank"><p className='text'>Patagonia</p></a>
+                    </div>
+                    <div className='rightAltCol'>
+                      <a href="https://www.adidas.ca/en" target="_blank"><img src={AdidasLogo} className='altImg'/></a>
+                      <a href="https://www.adidas.ca/en" target="_blank"><p className='text'>Adidas</p></a>
+                    </div>
+                    {/* <div class='arrowColumn'>
+                      <input type="image" src={RightArrow} />
+                    </div> */}
+                  </div>
+                </div>
               }
-              {susEffActive ?
-                <button className='susEffActive' onMouseEnter={this.susEffActive}>
-                  Sustainability Efforts
-                </button>
-                :
-                <button className='susEffort' onMouseEnter={this.susEffActive}>
-                  Sustainability Efforts
-                </button>
-              }
-              {envImpActive ?
-                <button className='envImpActive' onMouseEnter={this.envImpActive}>
-                  Environmental Impacts
-                </button>
-                :
-                <button className='envImpact' onMouseEnter={this.envImpActive}>
-                  Environmental Impacts
-                </button>
-              }
-              {ethLabActive ?
-                <button className='ethLabActive' onMouseEnter={this.ethLabActive}>
-                  Ethical Labour
-                </button>
-                :
-                <button className='ethLabour' onMouseEnter={this.ethLabActive}>
-                  Ethical Labour
-                </button>
-              }
-            </div>
-            <div class='categoryColumn'>
-              <p className='text'>
-                {pass ? 
-                  <b className='pass'>PASS <img src={ThumbsUp}/>: </b> 
-                  : 
-                  <b className='fail'>FAIL <img src={ThumbsDown}/>: </b>
-                }
-                {categoryText}
-                <br/>
-              </p>
-              <p className='text'>{categoryExplanation}</p>
+
+              <button className='learnBtn'>
+                <a href="https://xenodochial-rosalind-8f6d27.netlify.app/about" target="_blank" className="learnMoreLink">
+                  Learn More About Think Twice
+                </a>
+              </button>
             </div>
           </div>
-
-          <h3 className='thinkTwiceTxt'><em>Do you really need this? Think twice!</em></h3>
-          {/* Sustainable Alternatives */}
-          {sustainable ?
-          <div/>
-          :
-            <div>
-              <h2 className='susAltHeading'>Sustainable Alternatives   <img src={CircleCheck}/></h2>
-              <div class='row' align='center'>
-                {/* <div class='arrowColumn'>
-                  <input type="image" src={LeftArrow} />
-                </div> */}
-                <div className='leftAltCol'>
-                  <a href="https://www.patagonia.ca/home/" target="_blank"><img src={PatagoniaLogo} className='altImg'/></a>
-                  <a href="https://www.patagonia.ca/home/" target="_blank"><p className='text'>Patagonia</p></a>
-                </div>
-                <div className='rightAltCol'>
-                  <a href="https://www.adidas.ca/en" target="_blank"><img src={AdidasLogo} className='altImg'/></a>
-                  <a href="https://www.adidas.ca/en" target="_blank"><p className='text'>Adidas</p></a>
-                </div>
-                {/* <div class='arrowColumn'>
-                  <input type="image" src={RightArrow} />
-                </div> */}
-              </div>
-            </div>
-          }
-
-          <button className='learnBtn'>
-            <a href="https://xenodochial-rosalind-8f6d27.netlify.app/about" target="_blank" className="learnMoreLink">
-              Learn More About Think Twice
-            </a>
-          </button>
-        </div>
-      </div>
+        :
+        <div class="loader" />
+      }
+    </div>
   )}
 }
 
