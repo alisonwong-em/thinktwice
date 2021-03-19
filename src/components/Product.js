@@ -174,14 +174,12 @@ class Product extends React.Component {
   }
 
   render() {
-    // These would change based on info fetched from DB
-    let sustainable = false;
-    let { pass, categoryText, recMatActive, orgMatActive, plasFreeActive, productNameResponse } = this.state;
+    const { pass, categoryText, recMatActive, orgMatActive, plasFreeActive, productNameResponse, productDetailsResponse } = this.state;
 
     return (
       <div className='mainContent'>
         <h2 className='heading'>{productNameResponse.product_name}</h2>
-        {sustainable ? 
+        {productDetailsResponse.sus_rating ? 
         <div class='sustainable'>This product is Sustainable</div>
         : <div class='unsustainable'>This product is Unsustainable</div>
         }
@@ -240,30 +238,30 @@ class Product extends React.Component {
 
           <h3 className='thinkTwiceTxt'><em>Do you really need this? Think twice!</em></h3>
           {/* Sustainable Alternatives */}
-          {sustainable ?
-          <div/>
-          :
-          <div>
-            <h2 className='susAltHeading'>Sustainable Alternatives <img src={CircleCheck}/></h2>
-            <div class='row' align='center'>
-              {/* <div class='arrowColumn'>
-                <input type="image" src={LeftArrow} />
-              </div> */}
-              <div className='leftAltCol'>
-                {/* <img /> */}
-                <p className='text'>Patagonia Sweater</p>
-                <p className='price'>$315.00</p>
+          {productDetailsResponse.sus_rating ?
+            <div/>
+            :
+            <div>
+              <h2 className='susAltHeading'>Sustainable Alternatives <img src={CircleCheck}/></h2>
+              <div class='row' align='center'>
+                {/* <div class='arrowColumn'>
+                  <input type="image" src={LeftArrow} />
+                </div> */}
+                <div className='leftAltCol'>
+                  {/* <img /> */}
+                  <p className='text'>Patagonia Sweater</p>
+                  <p className='price'>$315.00</p>
+                </div>
+                <div className='rightAltCol'>
+                  {/* <img /> */}
+                  <p className='text'>Adidas Sweater</p>
+                  <p className='price'>$75.99</p>
+                </div>
+                {/* <div class='arrowColumn'>
+                  <input type="image" src={RightArrow} />
+                </div> */}
               </div>
-              <div className='rightAltCol'>
-                {/* <img /> */}
-                <p className='text'>Adidas Sweater</p>
-                <p className='price'>$75.99</p>
-              </div>
-              {/* <div class='arrowColumn'>
-                <input type="image" src={RightArrow} />
-              </div> */}
             </div>
-          </div>
           }
 
           <button className='learnBtn'>

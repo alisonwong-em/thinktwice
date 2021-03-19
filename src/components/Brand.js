@@ -23,6 +23,7 @@ class Brand extends React.Component {
       brandName: '',
       // brandResponse: {id: null, name:"", transparency: null, worker_emp: null, env_mgmt: null, url: null},
       brandResponse: [],
+      sustainable: false,
     }
 
     this.transActive = this.transActive.bind(this);
@@ -31,6 +32,7 @@ class Brand extends React.Component {
     this.ethLabActive = this.ethLabActive.bind(this);
     this.convertToGrades = this.convertToGrades.bind(this);
     this.categoryPass = this.categoryPass.bind(this);
+    this.susEffPass = this.susEffPass.bind(this);
   }
 
   componentDidMount() {
@@ -54,12 +56,10 @@ class Brand extends React.Component {
               brandName = brandUrl.slice(brandUrl.indexOf('.') + 1, brandUrl.indexOf('.', 12));
               
               // Switching the brand names to be capital because capitals are needed for the DB api
+              // Except adidas is lowercase in the DB
               switch(brandName) {
                 case 'gapcanada':
                   brandName = 'Gap';
-                  break;
-                case 'adidas':
-                  brandName = 'Adidas';
                   break;
                 case 'patagonia':
                   brandName = 'Patagonia';
@@ -72,12 +72,23 @@ class Brand extends React.Component {
             // Sends the brand name to the DB to get the brand info
             fetch(`http://127.0.0.1:5000/get_brand_data?brand=${brandName}`)
             .then(response => response.json())
-            .then(data => this.setState({
-              brandResponse: data,
-              // Update the default catergory text to match the fetched data - for the transparency category
-              categoryText: `${data.name} scores a ${this.convertToGrades(data.transparency)} in this category`,
-              transActive: true, susEffActive: false, envImpActive: false, ethLabActive: false
-            }))
+            .then(data => {
+
+              let sustainable = true
+              // if any of the category fails, then the brand is not sustainable
+              if(!this.categoryPass(data.transparency) || !this.categoryPass(data.env_mgmt)
+              || !this.categoryPass(data.worker_emp) || !this.susEffPass(data.name)) {
+                sustainable = false;
+              }
+
+              this.setState({
+                sustainable,
+                brandResponse: data,
+                // Update the default catergory text to match the fetched data - for the transparency category
+                categoryText: `${data.name} scores a ${this.convertToGrades(data.transparency)} in this category`,
+                transActive: true, susEffActive: false, envImpActive: false, ethLabActive: false
+              })
+            })
             .catch(error => console.log(error));
           }
       });
@@ -93,27 +104,7 @@ class Brand extends React.Component {
 
   susEffActive() {
     const { brandName } = this.state;
-    let pass = false;
-    // Pass/Fail depending on the brand
-    switch(brandName) {
-      case 'Gap':
-        pass = false;
-        break;
-      case 'Adidas':
-        pass = true;
-        break;
-      case 'Patagonia':
-        pass = true;
-        break;
-      case 'Old Navy':
-        pass = false;
-        break;
-      default:
-        pass = true;
-        break;
-    }
-
-    this.setState({ pass, categoryText: `${brandName} is part of various efforts to adress sustainability. This can be confirmed through sustainability information provided on their website.`, transActive: false, susEffActive: true, envImpActive: false, ethLabActive: false });
+    this.setState({ pass: this.susEffPass(), categoryText: `${brandName} is part of various efforts to adress sustainability. This can be confirmed through sustainability information provided on their website.`, transActive: false, susEffActive: true, envImpActive: false, ethLabActive: false });
   }
 
   envImpActive() {
@@ -137,6 +128,31 @@ class Brand extends React.Component {
     } else {
       return false;
     }
+  }
+
+  susEffPass() {
+    const { brandName } = this.state;
+    let pass = false;
+    // Pass/Fail depending on the brand
+    switch(brandName) {
+      case 'Gap':
+        pass = false;
+        break;
+      case 'Adidas':
+        pass = true;
+        break;
+      case 'Patagonia':
+        pass = true;
+        break;
+      case 'Old Navy':
+        pass = false;
+        break;
+      default:
+        pass = true;
+        break;
+    }
+
+    return pass;
   }
 
   convertToGrades(gradeIdx) {
@@ -190,9 +206,7 @@ class Brand extends React.Component {
   }
 
   render() {
-    // These would change based on info fetched from DB
-    let sustainable = false;
-    const { brandName, pass, categoryText, transActive, susEffActive, envImpActive, ethLabActive, brandResponse } = this.state;
+    const { sustainable, brandName, pass, categoryText, transActive, susEffActive, envImpActive, ethLabActive, brandResponse } = this.state;
 
     let categoryExplanation = '';
     if(pass) {
