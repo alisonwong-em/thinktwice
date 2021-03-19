@@ -25,8 +25,8 @@ class App extends React.Component {
           {productPage ?
           <div class='row'>
             <div className="tabCol">
-              <button className='activeTab'onClick={()=>this.openPageClick(true)}><h2 className="tabTxt">Product</h2></button>
-              <button className='tab' onClick={()=>this.openPageClick(false)}><h2 className="tabTxt">Brand</h2></button>
+              <button className='activeTab'onClick={()=>this.openPageClick(true)}><h2 className="tabProductTxt">Product</h2></button>
+              <button className='tab' onClick={()=>this.openPageClick(false)}><h2 className="tabBrandTxt">Brand</h2></button>
             </div>
             <div className='mainCol'>
               <ProductPage /> 
@@ -35,8 +35,8 @@ class App extends React.Component {
           : 
           <div class='row'>
             <div className="tabCol">
-              <button className='tab'onClick={()=>this.openPageClick(true)}><h2 className="tabTxt">Product</h2></button>
-              <button className='activeTab' onClick={()=>this.openPageClick(false)}><h2 className="tabTxt">Brand</h2></button>
+              <button className='tab'onClick={()=>this.openPageClick(true)}><h2 className="tabProductTxt">Product</h2></button>
+              <button className='activeTab' onClick={()=>this.openPageClick(false)}><h2 className="tabBrandTxt">Brand</h2></button>
             </div>
             <div className='mainCol'>
               <BrandPage />
