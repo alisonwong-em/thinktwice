@@ -2,18 +2,22 @@
   "manifest_version": 2,
 
   "name": "Think Twice",
-  "description": "This extension is a starting point to create a real Chrome extension",
+  "description": "Think Twice Sustainable Clothing Extension",
   "version": "0.0.1",
-  
+
+  "background": {
+    "scripts": ["background.js"]
+  },
+
   "browser_action": {
     "default_popup": "index.html",
-    "default_title": "Open the popup"
+    "default_title": "Think Twice"
   },
   "icons": {
     "16": "logo-small.png",
     "48": "logo-small.png",
     "128": "logo-small.png"
   },
-  "content_security_policy": "script-src 'self' 'sha256-NtWajI7UQjZKxA54BlbjYyVHD05knubgUSVJBQtioM8='; object-src 'self'",  "permissions": [
+  "content_security_policy": "script-src 'self' 'sha256-NtWajI7UQjZKxA54BlbjYyVHD05knubgUSVJBQtioM8='; object-src 'self'",  "permissions": ["tabs"
   ]
 }
