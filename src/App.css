@@ -18,10 +18,13 @@
   margin-top: -16px;
 }
 
-.tabTxt {
+.tabBrandTxt {
   margin-bottom: -10px;
-  /* vertical-align: center; */
-  /* text-align: center; */
+  transform: rotate(-90deg);
+}
+
+.tabProductTxt {
+  margin-bottom: -24px;
   transform: rotate(-90deg);
 }
 
