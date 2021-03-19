@@ -3,6 +3,7 @@ import React from 'react';
 import ThumbsUp from '../assets/img/thumbsup.svg';
 import ThumbsDown from '../assets/img/thumbsdown.svg';
 import CircleCheck from '../assets/img/circlecheck.svg';
+import NoImage from '../assets/img/alts/noImage.png';
 // import LeftArrow from '../assets/img/leftarrow.png';
 // import RightArrow from '../assets/img/rightarrow.png';
 import { getCurrentTab } from "../common/Utils";
@@ -19,6 +20,7 @@ class Product extends React.Component {
       plasFreeActive: false,
       productNameResponse: [],
       productDetailsResponse: [],
+      altsResponse: [],
       loaded: false,
     }
 
@@ -88,6 +90,21 @@ class Product extends React.Component {
                   productDetailsResponse: data,
                   pass, categoryText, recMatActive: true, orgMatActive: false, plasFreeActive: false
                 });
+
+                if(!data.sus_rating) {
+                  console.log('yo!!')
+                  // Sends the brand name and product url to get the alternatives
+                  fetch(`http://127.0.0.1:5000/get_alternatives?brand=${brandName}&url=${url}`)
+                  .then(response => response.json())
+                  .then(data => this.setState({
+                      altsResponse: data,
+                      loaded: true,
+                    })
+                  )
+                  .catch(error => console.log(error));
+                } else {
+                  console.log('I am sustainable')
+                }
               }
             })
             .catch(error => console.log(error));
@@ -95,12 +112,9 @@ class Product extends React.Component {
             // Sends the brand name and product url to get the product name
             fetch(`http://127.0.0.1:5000/scrape_product_name_overview?brand=${brandName}&url=${url}`)
             .then(response => response.json())
-            .then(data => {
-              this.setState({
+            .then(data => this.setState({
                 productNameResponse: data,
-                loaded: true,
               })
-            }
             )
             .catch(error => console.log(error));
           }
@@ -206,7 +220,7 @@ class Product extends React.Component {
   }
 
   render() {
-    const { loaded, pass, categoryText, recMatActive, orgMatActive, plasFreeActive, productNameResponse, productDetailsResponse } = this.state;
+    const { loaded, pass, categoryText, recMatActive, orgMatActive, plasFreeActive, productNameResponse, productDetailsResponse, altsResponse } = this.state;
 
     return (
       <div>
@@ -277,24 +291,38 @@ class Product extends React.Component {
               :
               <div>
                 <h2 className='susAltHeading'>Sustainable Alternatives <img src={CircleCheck}/></h2>
-                <div class='row' align='center'>
-                  {/* <div class='arrowColumn'>
-                    <input type="image" src={LeftArrow} />
-                  </div> */}
-                  <div className='leftAltCol'>
-                    {/* <img /> */}
-                    <p className='text'>Patagonia Sweater</p>
-                    <p className='price'>$315.00</p>
+                { altsResponse === [] ? <div/> :
+                  <div class='row' align='center'>
+                    {/* <div class='arrowColumn'>
+                      <input type="image" src={LeftArrow} />
+                    </div> */}
+                      <div className='leftAltCol'>
+                        <a href={altsResponse[0].url} target="_blank">
+                          {altsResponse[0].image === undefined ? 
+                            <img src={NoImage} className='altImg'/> 
+                            : 
+                            <img src={altsResponse[0].image} className='altImg'/>
+                          }
+                        </a>
+                        <p className='text'>{altsResponse[0].product_name}</p>
+                        <p className='price'>{altsResponse[0].product_price}</p>
+                      </div>
+                      <div className='rightAltCol'>
+                        <a href={altsResponse[1].url} target="_blank">
+                          {altsResponse[1].image === undefined ? 
+                            <img src={NoImage} className='altImg'/> 
+                            : 
+                            <img src={altsResponse[1].image} className='altImg'/>
+                          }
+                        </a>
+                        <p className='text'>{altsResponse[1].product_name}</p>
+                        <p className='price'>{altsResponse[1].product_price}</p>
+                      </div>
+                    {/* <div class='arrowColumn'>
+                      <input type="image" src={RightArrow} />
+                    </div> */}
                   </div>
-                  <div className='rightAltCol'>
-                    {/* <img /> */}
-                    <p className='text'>Adidas Sweater</p>
-                    <p className='price'>$75.99</p>
-                  </div>
-                  {/* <div class='arrowColumn'>
-                    <input type="image" src={RightArrow} />
-                  </div> */}
-                </div>
+                }
               </div>
             }
 
