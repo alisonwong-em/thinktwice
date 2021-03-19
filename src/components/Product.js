@@ -92,7 +92,6 @@ class Product extends React.Component {
                 });
 
                 if(!data.sus_rating) {
-                  console.log('yo!!')
                   // Sends the brand name and product url to get the alternatives
                   fetch(`http://127.0.0.1:5000/get_alternatives?brand=${brandName}&url=${url}`)
                   .then(response => response.json())
@@ -103,7 +102,6 @@ class Product extends React.Component {
                   )
                   .catch(error => console.log(error));
                 } else {
-                  console.log('I am sustainable')
                   this.setState({ loaded: true });
                 }
               }
