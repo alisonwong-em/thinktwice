@@ -236,6 +236,16 @@ button {
     animation: spin 2s linear infinite;
 }
 
+.altsLoader {
+    border: 8px solid #c4c4c4; /* Light grey */
+    border-top: 8px solid #1C7399; /* Blue */
+    margin-left: 180px;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 2s linear infinite;
+}
+
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }

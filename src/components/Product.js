@@ -21,16 +21,20 @@ class Product extends React.Component {
       productNameResponse: [],
       productDetailsResponse: [],
       altsResponse: [],
-      loaded: false,
+      descLoaded: false, // if the product desc and word matching content has been returned
+      altsLoaded: false, // if the alternatives have loaded
+      url: '',
+      brandName: '',
     }
 
     this.recMatActive = this.recMatActive.bind(this);
     this.orgMatActive = this.orgMatActive.bind(this);
     this.plasFreeActive = this.plasFreeActive.bind(this);
+    this.fetchAlts = this.fetchAlts.bind(this);
   }
 
   componentDidMount() {
-    this.setState({ loaded: false });
+    this.setState({ descLoaded: false, altsLoaded: false });
 
     // Get the URL of the current tab the extension is being used on
     getCurrentTab((tab) => {
@@ -54,6 +58,8 @@ class Product extends React.Component {
                 brandName = 'gap';
               }
             }
+
+            this.setState({ brandName, url });
 
             // Sends the brand name and product url to get the product details
             fetch(`http://127.0.0.1:5000/scrape_product_details?brand=${brandName}&url=${url}`)
@@ -88,22 +94,9 @@ class Product extends React.Component {
               
                 this.setState({
                   productDetailsResponse: data,
+                  descLoaded: true,
                   pass, categoryText, recMatActive: true, orgMatActive: false, plasFreeActive: false
                 });
-
-                if(!data.sus_rating) {
-                  // Sends the brand name and product url to get the alternatives
-                  fetch(`http://127.0.0.1:5000/get_alternatives?brand=${brandName}&url=${url}`)
-                  .then(response => response.json())
-                  .then(data => this.setState({
-                      altsResponse: data,
-                      loaded: true,
-                    })
-                  )
-                  .catch(error => console.log(error));
-                } else {
-                  this.setState({ loaded: true });
-                }
               }
             })
             .catch(error => console.log(error));
@@ -119,6 +112,24 @@ class Product extends React.Component {
           }
       });
     });    
+  }
+
+  fetchAlts() {
+    const { brandName, url } = this.state;
+
+    // Sends the brand name and product url to get the alternatives
+    fetch(`http://127.0.0.1:5000/get_alternatives?brand=${brandName}&url=${url}`)
+    .then(response => response.json())
+    .then(data => {
+      this.setState({
+        altsResponse: data,
+        altsLoaded: true,
+      })
+
+      return <div/>;
+    })
+    .catch(error => console.log(error));
+    return <div class="altsLoader" />;
   }
 
   recMatActive() {
@@ -219,11 +230,11 @@ class Product extends React.Component {
   }
 
   render() {
-    const { loaded, pass, categoryText, recMatActive, orgMatActive, plasFreeActive, productNameResponse, productDetailsResponse, altsResponse } = this.state;
+    const { altsLoaded, descLoaded, pass, categoryText, recMatActive, orgMatActive, plasFreeActive, productNameResponse, productDetailsResponse, altsResponse } = this.state;
 
     return (
       <div>
-      { loaded ?
+      { descLoaded ?
         <div className='mainContent'>
           <h2 className='heading'>{productNameResponse.product_name}</h2>
           {productDetailsResponse.sus_rating ? 
@@ -290,7 +301,7 @@ class Product extends React.Component {
               :
               <div>
                 <h2 className='susAltHeading'>Sustainable Alternatives <img src={CircleCheck}/></h2>
-                { altsResponse === [] ? <div/> :
+                { altsLoaded ?
                   <div class='row' align='center'>
                     {/* <div class='arrowColumn'>
                       <input type="image" src={LeftArrow} />
@@ -321,6 +332,8 @@ class Product extends React.Component {
                       <input type="image" src={RightArrow} />
                     </div> */}
                   </div>
+                  :
+                  this.fetchAlts()
                 }
               </div>
             }
